@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.fererlab</groupId>
+    <artifactId>example-user-bundle</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>bundle</packaging><!-- the <packaging> specifier must be "bundle" -->
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- maven-compiler-plugin java version - use java 1.8 -->
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <!-- maven compiler plugin version -->
+        <version.maven.compiler.plugin>3.1</version.maven.compiler.plugin>
+    </properties>
+
+    <build>
+        <plugins>
+            <!-- COMPILER PLUGIN - USE JAVA 1.8 -->
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${version.maven.compiler.plugin}</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+            <!-- BUNDLE PLUGIN - GENERATES MANIFEST.MF-->
+            <plugin>
+                <!-- the plugin and configuration must be specified -->
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <version>3.0.1</version>
+                <configuration>
+                    <instructions>
+                        <_noee>true</_noee>
+                        <DynamicImport-Package>*</DynamicImport-Package>
+                        <Bundle-Activator>com.fererlab.example.user.UserActivator</Bundle-Activator>
+                        <Bundle-RequiredExecutionEnvironment>JavaSE-1.8</Bundle-RequiredExecutionEnvironment>
+                    </instructions>
+                </configuration>
+            </plugin>
+            <!-- ANT PLUGIN - COPY MANIFEST FILE UNDER META-INF -->
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>install-project-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <copy file="target/classes/META-INF/MANIFEST.MF" tofile="META-INF/MANIFEST.MF"/>
+                            </tasks>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <!-- TEST -->
+
+        <!-- PROVIDED -->
+
+        <!-- osgi -->
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.core</artifactId>
+            <version>5.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- dm interface -->
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>osgi-dm-interface</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- user interface -->
+        <dependency>
+            <groupId>com.fererlab</groupId>
+            <artifactId>example-user-bundle-interface</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- group interface -->
+        <dependency>
+            <groupId>com.fererlab</groupId>
+            <artifactId>example-group-bundle-interface</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- PACK WITH -->
+
+    </dependencies>
+
+
+</project>
