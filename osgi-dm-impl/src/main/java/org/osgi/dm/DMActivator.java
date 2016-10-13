@@ -21,7 +21,7 @@ public class DMActivator implements BundleActivator, BundleTrackerListener {
     private Map<Object, List<Method>> injectedServiceMethods = new HashMap<>();
 
     public void start(BundleContext bundleContext) throws Exception {
-        log.info("dependency manager activator started");
+        log.info("dependency management activator started");
 
         // bundle tracker will track for the starting bundles
         DMBundleTracker bundleTracker = new DMBundleTracker(this, bundleContext, Bundle.STARTING, null);
@@ -41,7 +41,7 @@ public class DMActivator implements BundleActivator, BundleTrackerListener {
     }
 
     public void stop(BundleContext bundleContext) throws Exception {
-        log.info("dependency manager activator stopped");
+        log.info("dependency management activator stopped");
     }
 
     @Override
