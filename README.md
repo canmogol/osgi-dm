@@ -1,6 +1,22 @@
 # osgi-dm
 dependency management bundle for OSGI
 
+"osgi-dm-impl" project contains the implementation of the dependency injection, 
+"osgi-dm-interface" contains the annotation and interface classes that will be imported by client bundles.
+
+Group and User bundle projects each has interfaces and they have cyclic dependencies to each other that will be injected,
+"example-group-bundle"
+"example-group-bundle-interface"
+"example-user-bundle"
+"example-user-bundle-interface"
+
+The runner project is just used to copile other projects and run the project with ```start.sh``` script,
+"example-runner"
+
+All projects are maven projects, to compile all projects just run ```mvn clean install``` inside the "example-runner" folder,
+
+
+
 osgi-dm-interface has an annotation for inject methods and a listener interface to get notified about injections.
 
 Below code shows a sample of ```@Inject``` annotation usage, it injects the ```UserService``` instance,
