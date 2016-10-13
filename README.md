@@ -1,6 +1,8 @@
 # osgi-dm
 dependency management bundle for OSGI
 
+---
+
 "osgi-dm-impl" project contains the implementation of the dependency injection, 
 "osgi-dm-interface" contains the annotation and interface classes that will be imported by client bundles.
 
@@ -15,6 +17,9 @@ The runner project is just used to copile other projects and run the project wit
 
 All projects are maven projects, to compile all projects just run ```mvn clean install``` inside the "example-runner" folder,
 
+---
+
+check ```GroupActivator``` and ```UserActivator``` classes for reallife application,
 
 
 osgi-dm-interface has an annotation for inject methods and a listener interface to get notified about injections.
