@@ -35,7 +35,7 @@ public class DMBundleTracker extends BundleTracker<Bundle> {
     public synchronized void removedBundle(Bundle bundle, BundleEvent event, Bundle object) {
         if (bundle.getState() == Bundle.ACTIVE || event.getType() == BundleEvent.STARTED) {
             bundleNames.remove(bundle.getSymbolicName());
-            if (bundleNames.size() == 0) {
+            if (bundleNames.isEmpty()) {
                 listener.allBundlesStarted();
             }
         }

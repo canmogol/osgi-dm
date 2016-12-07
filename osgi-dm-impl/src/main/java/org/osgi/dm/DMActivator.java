@@ -46,11 +46,11 @@ public class DMActivator implements BundleActivator, BundleTrackerListener {
 
     @Override
     public void allBundlesStarted() {
-        injectedServiceMethods.forEach((servis, metotlar) -> {
-            if (servis instanceof InjectionAware) {
-                InjectionAware injectionAware = (InjectionAware) servis;
-                if (metotlar.size() > 0) {
-                    List<Class> dependencies = metotlar.stream().map(metot -> {
+        injectedServiceMethods.forEach((service, methods) -> {
+            if (service instanceof InjectionAware) {
+                InjectionAware injectionAware = (InjectionAware) service;
+                if (methods.size() > 0) {
+                    List<Class> dependencies = methods.stream().map(metot -> {
                         Class type = null;
                         if (metot.getParameterTypes().length == 1) {
                             type = metot.getParameterTypes()[0];

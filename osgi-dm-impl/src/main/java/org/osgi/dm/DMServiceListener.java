@@ -61,90 +61,93 @@ public class DMServiceListener implements ServiceListener {
         }
         switch (event.getType()) {
             case ServiceEvent.UNREGISTERING:
-
-                // remove this service from type list
-                typeList.stream().forEach(type -> {
-                    if (services.containsKey(type) && services.get(type).contains(service)) {
-                        services.get(type).remove(service);
-                    }
-                });
-
-                typeList.stream().filter(services::containsKey).forEach(type -> {
-                    methods.entrySet().stream().filter(entry -> entry.getKey().equals(type))
-                            .map(Map.Entry::getValue).forEach(list -> {
-                        list.forEach(map -> {
-                            // the object is the service that has the inject annotated method
-                            map.values().stream().filter(object -> object instanceof InjectionAware)
-                                    .forEach(object -> {
-                                        // notify others that this service is lost
-                                        InjectionAware injectionAware = (InjectionAware) object;
-                                        injectionAware.lost(type);
-                                    });
-                        });
-                    });
-                });
-
-                // Inject annotasyonlu metotlari bul
-                // found methods that are annotated with Inject annotation
-                List<Method> injectAnnotatedMethods = getInjectAnnotatedMethods(service);
-
-                // remove this service from invoked methods
-                invokedMethodObjects.forEach((method, objects) -> {
-                    Iterator<Object> it = objects.iterator();
-                    while (it.hasNext()) {
-                        Object methodObject = it.next();
-                        if (service.equals(methodObject)) {
-                            it.remove();
-                        } else {
-                            for (Method injectAnnotatedMethod : injectAnnotatedMethods) {
-                                if (method.equals(injectAnnotatedMethod)) {
-                                    it.remove();
-                                }
-                            }
-                        }
-                    }
-                });
-
-                // remove this service from registered methods
-                methods.forEach((methodParameterType, methodServiceList) -> {
-                    Iterator<Map<Method, Object>> iterator = methodServiceList.iterator();
-                    while (iterator.hasNext()) {
-                        Map<Method, Object> methodService = iterator.next();
-                        if (methodService.values().contains(service)) {
-                            iterator.remove();
-                        }
-                    }
-                });
-
-                // remove this service from inject service methods
-                Iterator<Map.Entry<Object, List<Method>>> iterator = injectServiceMethods.entrySet().iterator();
-                while (iterator.hasNext()) {
-                    Map.Entry<Object, List<Method>> entry = iterator.next();
-                    if (entry.getKey().equals(service)) {
-                        iterator.remove();
-                    }
-                }
-
-                // end of UNREGISTERING case
+                handleUnregisterEvent(service, typeList);
                 break;
             case ServiceEvent.REGISTERED:
-                typeList.stream().forEach(type -> {
-                    // add service to registered services
-                    if (!services.containsKey(type)) {
-                        services.put(type, new ArrayList<>());
-                    }
-                    // add the service for this type
-                    services.get(type).add(service);
-                });
-
-                // handle injection
-                handleInjection(service);
-
-                // end of REGISTERED case
+		handleRegisteredEvent(service, typeList);
                 break;
             default:
                 break;
         }
+    }
+
+    private void handleRegisteredEvent(Object service, List<Class> typeList) {
+	typeList.stream().forEach(type -> {
+	    // add service to registered services
+	    if (!services.containsKey(type)) {
+		services.put(type, new ArrayList<>());
+	    }
+	    // add the service for this type
+	    services.get(type).add(service);
+	});
+
+	// handle injection
+	handleInjection(service);
+    }
+
+    private void handleUnregisterEvent(Object service, List<Class> typeList) {
+        // remove this service from type list
+        typeList.stream().forEach(type -> {
+	    if (services.containsKey(type) && services.get(type).contains(service)) {
+		services.get(type).remove(service);
+	    }
+	});
+
+        typeList.stream().filter(services::containsKey).forEach(type -> {
+	    methods.entrySet().stream().filter(entry -> entry.getKey().equals(type))
+		    .map(Map.Entry::getValue).forEach(list -> {
+		list.forEach(map -> {
+		    // the object is the service that has the inject annotated method
+		    map.values().stream().filter(object -> object instanceof InjectionAware)
+			    .forEach(object -> {
+				// notify others that this service is lost
+				InjectionAware injectionAware = (InjectionAware) object;
+				injectionAware.lost(type);
+			    });
+		});
+	    });
+	});
+
+        // Inject annotasyonlu metotlari bul
+        // found methods that are annotated with Inject annotation
+        List<Method> injectAnnotatedMethods = getInjectAnnotatedMethods(service);
+
+        // remove this service from invoked methods
+        invokedMethodObjects.forEach((method, objects) -> {
+	    Iterator<Object> it = objects.iterator();
+	    while (it.hasNext()) {
+		Object methodObject = it.next();
+		if (service.equals(methodObject)) {
+		    it.remove();
+		} else {
+		    for (Method injectAnnotatedMethod : injectAnnotatedMethods) {
+			if (method.equals(injectAnnotatedMethod)) {
+			    it.remove();
+			}
+		    }
+		}
+	    }
+	});
+
+        // remove this service from registered methods
+        methods.forEach((methodParameterType, methodServiceList) -> {
+	    Iterator<Map<Method, Object>> iterator = methodServiceList.iterator();
+	    while (iterator.hasNext()) {
+		Map<Method, Object> methodService = iterator.next();
+		if (methodService.values().contains(service)) {
+		    iterator.remove();
+		}
+	    }
+	});
+
+        // remove this service from inject service methods
+        Iterator<Map.Entry<Object, List<Method>>> iterator = injectServiceMethods.entrySet().iterator();
+        while (iterator.hasNext()) {
+	    Map.Entry<Object, List<Method>> entry = iterator.next();
+	    if (entry.getKey().equals(service)) {
+		iterator.remove();
+	    }
+	}
     }
 
     private void handleInjection(Object injectService) {
