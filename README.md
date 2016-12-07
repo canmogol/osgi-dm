@@ -25,7 +25,7 @@ check ```GroupActivator``` and ```UserActivator``` classes for reallife applicat
 osgi-dm-interface has an annotation for inject methods and a listener interface to get notified about injections.
 
 Below code shows a sample of ```@Inject``` annotation usage, it injects the ```UserService``` instance,
-```
+```java
     @Inject
     public void setUserService(UserService userService) {
         this.userService = userService;
@@ -33,7 +33,7 @@ Below code shows a sample of ```@Inject``` annotation usage, it injects the ```U
 ```
 
 Below code shows a sample of ```InjectionAware``` interface usage, ```public void complete()``` method is the start point,
-```
+```java
 public class AnyPojo implements InjectionAware {
 
     @Override
