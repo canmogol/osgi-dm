@@ -12,6 +12,11 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- maven-compiler-plugin java version - use java 1.8 -->
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <!-- maven compiler plugin version -->
+        <version.maven.compiler.plugin>3.1</version.maven.compiler.plugin>
     </properties>
 
     <repositories>
@@ -30,6 +35,15 @@
 
     <build>
         <plugins>
+            <!-- COMPILER PLUGIN - USE JAVA 1.8 -->
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${version.maven.compiler.plugin}</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
             <!-- DEPENDENCY PLUGIN - COPY DEPENDENCIES UNDER OSGI PROJECT -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -72,6 +86,12 @@
                                         <include name="**/**"/>
                                     </fileset>
                                 </copy>
+                                <copy todir="${project.basedir}/target/">
+                                    <fileset dir="dependencies">
+                                        <include name="**/**"/>
+                                    </fileset>
+                                </copy>
+                                <delete dir="dependencies"/>
                             </tasks>
                         </configuration>
                     </execution>

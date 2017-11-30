@@ -2,6 +2,7 @@ package com.fererlab.example.group;
 
 import com.fererlab.example.group.api.GroupService;
 import com.fererlab.example.user.api.UserService;
+import org.apache.commons.lang.ObjectUtils;
 import org.osgi.dm.api.Inject;
 import org.osgi.dm.api.InjectionAware;
 import org.osgi.framework.BundleActivator;
@@ -9,6 +10,7 @@ import org.osgi.framework.BundleContext;
 
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Vector;
 import java.util.logging.Logger;
 
 public class GroupActivator implements BundleActivator, InjectionAware {
@@ -50,6 +52,8 @@ public class GroupActivator implements BundleActivator, InjectionAware {
         } else {
             log.severe("UserService did not injected or a null is injected instead");
         }
+        final Object clone = ObjectUtils.clone(new Vector<>());
+        log.info("*** COMMONS-LANG 2.6 -> ObjectUtils - clone: " + clone);
     }
 
     @Override

@@ -63,6 +63,31 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- DEPENDENCY PLUGIN - COPY DEPENDENCIES UNDER OSGI PROJECT -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.10</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.basedir}/../example-runner/dependencies</outputDirectory>
+                            <overWriteReleases>true</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                            <includeScope>compile</includeScope>
+                            <excludeScope>test,provided,runtime,system</excludeScope>
+                            <excludeGroupIds>org.osgi,0.0</excludeGroupIds>
+                            <excludeArtifactIds>0.0</excludeArtifactIds>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
@@ -104,6 +129,12 @@
         </dependency>
 
         <!-- PACK WITH -->
+
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.5</version>
+        </dependency>
 
     </dependencies>
 

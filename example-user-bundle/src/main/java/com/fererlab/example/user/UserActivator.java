@@ -2,6 +2,7 @@ package com.fererlab.example.user;
 
 import com.fererlab.example.group.api.GroupService;
 import com.fererlab.example.user.api.UserService;
+import org.apache.commons.lang.ObjectUtils;
 import org.osgi.dm.api.Inject;
 import org.osgi.dm.api.InjectionAware;
 import org.osgi.framework.BundleActivator;
@@ -50,6 +51,8 @@ public class UserActivator implements BundleActivator, InjectionAware {
         } else {
             log.severe("GroupService did not injected or a null is injected instead");
         }
+        final boolean equals = ObjectUtils.equals("", "");
+        log.info("*** COMMONS-LANG 2.5 -> ObjectUtils - equals: " + equals);
     }
 
     @Override
